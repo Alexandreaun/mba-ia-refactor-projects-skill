@@ -1,0 +1,106 @@
+## Fase 2 - Auditoria do Projeto
+
+**Diretivas:**
+Inspecione o código-fonte comparando-o com o catálogo de anti-patterns abaixo. O objetivo é encontrar **no mínimo 5 problemas**, incluindo obrigatoriamente pelo menos um de nível **CRITICAL** ou **HIGH**, dois de nível **MEDIUM** e dois de nível **LOW**. Baseie suas sugestões de correção no **Playbook de Transformações**.
+
+**Regras de Auditoria:**
+1. **Precisão Absoluta:** Para cada ocorrência, registre o arquivo exato e o intervalo de linhas. É estritamente proibido usar termos vagos como "em algum lugar neste arquivo".
+2. **Sem Subjetividade:** Não opine sobre a gravidade da vulnerabilidade; classifique-a puramente de acordo com as definições do Catálogo abaixo.
+3. **Verificação de Obsolescência:** Verifique explicitamente APIs obsoletas ou inseguras para a versão da pilha/framework detectada (ex: padrões ORM desatualizados, hashes inseguros) e recomende o equivalente moderno.
+
+---
+
+### Catálogo de Anti-Patterns e Severidades
+
+**CRITICAL (Falhas graves de arquitetura/segurança)**
+1. **Hardcoded Secrets & Configs:** Chaves de API, senhas, tokens ou URLs de banco de dados escritos diretamente no código-fonte em vez de variáveis de ambiente.
+2. **God Class / Monolithic Entrypoint:** Um único arquivo ou classe que mistura roteamento (ou UI), regras de negócio complexas e consultas diretas ao banco de dados ou APIs externas.
+
+**HIGH (Violações estruturais MVC/SOLID)**
+3. **Fat Controllers / Logic in View:** Controladores ou Componentes Visuais que contêm regras de negócio puras, cálculos complexos ou manipulação direta de dados, impedindo o teste unitário da regra sem carregar a interface/rede.
+4. **Tight Coupling (Forte Acoplamento):** Instanciação direta de dependências complexas (bancos de dados, serviços externos) dentro da classe consumidora, inviabilizando injeção de dependência (DI) e mocks.
+
+**MEDIUM (Gargalos de performance e padronização)**
+5. **N+1 Query Problem / Inefficient Loops:** Consultas a banco de dados ou chamadas de rede feitas dentro de loops de iteração, em vez de buscar os dados em lote (batch/JOINs).
+6. **Swallowed Exceptions / Duplicated Error Handling:** Blocos `try/catch` que ignoram o erro silenciosamente ou tratamento de erro descentralizado e repetido em cada função, sem um handler global.
+7. **Deprecated/Unsafe APIs:** Uso de bibliotecas abandonadas, funções reprovadas na versão atual do framework ou algoritmos criptográficos inseguros (ex: MD5, SHA1).
+
+**LOW (Legibilidade e Manutenção)**
+8. **Magic Numbers / Magic Strings:** Uso de valores literais soltos no código (ex: `if (status == 2)`, `setTimeout(fn, 86400000)`) sem atribuição a constantes semânticas.
+
+---
+
+### Playbook de Transformação (Antes / Depois)
+Use estes padrões para preencher o campo `Recommendation` no seu relatório. Adapte a sintaxe à linguagem do projeto atual.
+
+**1. Hardcoded Secrets (CRITICAL)**
+*   *Antes:* `db_connect("postgres://admin:1234@localhost/db")`
+*   *Depois:* `db_connect(ENV['DATABASE_URL'])`
+
+**2. God Class (CRITICAL)**
+*   *Antes:* A rota `/users` valida o request, faz o `SELECT` no SQL, formata os dados e retorna o JSON, tudo no mesmo bloco.
+*   *Depois:* A rota chama `UserController`, que repassa os dados para o `UserService` (negócio), que busca os dados no `UserRepository` (dados).
+
+**3. Fat Controllers / Logic in View (HIGH)**
+*   *Antes:* `Controller: if (user.age > 18 && user.credit > 500) { applyDiscount() }`
+*   *Depois:* `Controller: discountService.applyIfEligible(user)`. A regra mora no Service/Model.
+
+**4. Tight Coupling (HIGH)**
+*   *Antes:* `class Payment { init() { this.api = new StripeAPI() } }`
+*   *Depois:* `class Payment { init(api: PaymentGateway) { this.api = api } }`. A dependência é injetada.
+
+**5. N+1 Queries (MEDIUM)**
+*   *Antes:* `for user in users: get_posts_for_user(user.id)` (100 consultas).
+*   *Depois:* `get_posts_for_users(user_ids)` (1 consulta com IN clause / Eager Loading).
+
+**6. Swallowed Exceptions (MEDIUM)**
+*   *Antes:* `try { doRiskThing() } catch (e) { print(e) }`
+*   *Depois:* A rota lança o erro nativamente e um `GlobalErrorHandler` (middleware/interceptor) captura, loga e formata a resposta padronizada para o cliente.
+
+**7. Deprecated / Unsafe APIs (MEDIUM)**
+*   *Antes:* `hash_password(input, algorithm: "MD5")`
+*   *Depois:* `hash_password(input, algorithm: "bcrypt" / "Argon2")`
+
+**8. Magic Numbers (LOW)**
+*   *Antes:* `if (password.length < 8)`
+*   *Depois:* `const MIN_PASSWORD_LENGTH = 8; if (password.length < MIN_PASSWORD_LENGTH)`
+
+---
+
+**Ação de Saída Obrigatória:**
+Não imprima o relatório inteiro no terminal. Em vez disso:
+1. Identifique o nome da pasta raiz atual do projeto (ex: `Task-manager-api`).
+2. Verifique se o diretório `reports/` existe na raiz do projeto. Se não, crie-o.
+3. Crie e salve o relatório dentro de `reports/` utilizando o formato de nome `audit-project-<nome-da-pasta-raiz>.md` (ex: `reports/audit-project-Task-manager-api.md`).
+4. Utilize EXATAMENTE a estrutura abaixo (Ordene os achados como CRITICAL → HIGH → MEDIUM → LOW):
+
+================================
+ARCHITECTURE AUDIT REPORT
+================================
+Project: <name>
+Stack:   <language + framework>
+Files:   <N> analyzed | ~<LOC> estimated lines of code
+
+## Summary
+CRITICAL: <n> | HIGH: <n> | MEDIUM: <n> | LOW: <n>
+
+## Findings
+
+### [<SEVERITY>] <Anti-pattern name>
+File: <path>:<line-or-range>
+Description: <what is wrong, concretely>
+Impact: <why it matters — testability, security, correctness, maintainability>
+Recommendation: <the fix, in one or two sentences based on the Playbook>
+
+... (one block per finding)
+
+================================
+Total: <n> findings
+================================
+
+---
+
+## DIRETIVA DE PARADA (HALT)
+**Pare a execução imediatamente após salvar o arquivo.** 
+1. Pergunte explicitamente ao usuário no terminal: **"Prosseguir com a refatoração (Fase 3)? [s/n]"**
+2. **NÃO modifique, crie, mova ou exclua** nenhum outro arquivo do projeto até que o usuário confirme. Não prossiga sem essa etapa.
