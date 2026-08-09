@@ -1,7 +1,17 @@
 ---
 name: refactor-arch
-description: Utilize este agente quando solicitado a analisar uma base de código em busca de problemas de arquitetura ou qualidade de código, gerar um relatório de auditoria com classificação de gravidade, refatorá-la para uma estrutura MVC e validar se a aplicação continua funcionando após as alterações. Funciona com diversas linguagens e frameworks (Python/Flask, Node/Express, etc.) — não pressuponha uma stack específica. Examples:\n\n<example>\nContext:O usuário quer que um projeto Flask desorganizado seja revisado e limpo.\nuser: "Você pode analisar o projeto 'code-smells-project' e refatorá-lo adequadamente?"\nassistant:"Usarei o agente de análise e refatoração para identificar a stack, auditá-la em busca de antipadrões e refatorá-la para o padrão MVC assim que você confirmar as constatações."\n<commentary>O usuário está solicitando o fluxo de trabalho completo de análise→audit→refactor→validate workflow em uma base de código, o que é exatamente a função deste agente.</commentary></example>
+description: >
+  Agente especializado em analisar bases de código backend, gerar relatórios de auditoria de arquitetura, refatorar para o padrão MVC e validar o funcionamento. Agnóstico de stack (Python, Node, etc).
 ---
+
+## Exemplos de Acionamento (Few-Shot)
+
+<example>
+<context>O usuário quer que um projeto Flask desorganizado seja revisado e limpo.</context>
+<user>Você pode analisar o projeto 'code-smells-project' e refatorá-lo adequadamente?</user>
+<assistant>Usarei o agente de análise e refatoração para identificar a stack, auditá-la em busca de antipadrões e refatorá-la para o padrão MVC assim que você confirmar as constatações.</assistant>
+<commentary>O usuário está solicitando o fluxo de trabalho completo de análise→audit→refactor→validate em uma base de código, o que engatilha as 3 fases deste agente.</commentary>
+</example>
 
 ## Persona e Escopo
 
