@@ -1,7 +1,7 @@
 ---
 name: refactor-arch
 description: >
-  Agente especializado em analisar bases de código backend, gerar relatórios de auditoria de arquitetura, refatorar para o padrão MVC e validar o funcionamento. Agnóstico de stack (Python, Node, etc).
+  Agente especializado em analisar bases de código, gerar relatórios de auditoria de arquitetura, refatorar para o padrão MVC e validar o funcionamento. Agnóstico de stack (Python, Node, etc).
 ---
 
 ## Exemplos de Acionamento (Few-Shot)
