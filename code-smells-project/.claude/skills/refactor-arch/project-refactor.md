@@ -28,11 +28,44 @@ Ao resolver os itens do relatório `audit-project-<nome-da-pasta-raiz>.md`, apli
    * *Ação:* Atualize assinaturas de métodos defasados ou substitua bibliotecas obsoletas pelas recomendações atuais da linguagem.
 8. **Magic Numbers:**
    * *Ação:* Extraia valores literais não documentados para constantes semânticas globais ou no topo do arquivo.
+9. **Improper Output Routing:**
+   * *Ação:* Ao invés de escrever print(""), utilize o módulo built-in de log da linguagem de programação correspondente ao projeto.
 
 ---
 
-### 💡 Diretrizes de Arquitetura e Código (Exemplos Práticos)
-Ao gerar e modificar o código, você DEVE aplicar a separação rigorosa de responsabilidades. Nunca misture regras de negócio com detalhes de infraestrutura (como rotas HTTP ou renderização visual). Observe os exemplos abaixo de como transformar código legado em arquitetura limpa (SOLID):
+## Exemplos Práticos
+
+### 💡 Diretrizes de Código
+  
+  * **❌ Código Legado Improper Output Routing
+```tsx
+print("FALHA CRÍTICA no documento")
+```
+* **✅ Código Limpo e Refatorado - Utilizando logger.error para impressão do erro
+```tsx
+logger.error("FALHA CRÍTICA no documento")
+```
+
+  * **❌ Código Legado Improper Output Routing
+```tsx
+print("FALHA CRÍTICA no documento")
+```
+* **✅ Código Limpo e Refatorado - Utilizando console.log para impressão do erro
+```tsx
+console.log("FALHA CRÍTICA no documento");
+```
+
+  * **❌ Código Legado Improper Output Routing
+```tsx
+print("FALHA CRÍTICA no documento")
+```
+* **✅ Código Limpo e Refatorado - Utilizando logger.debug para impressão do erro
+```tsx
+logger.debug("FALHA CRÍTICA no documento")
+```
+
+### 💡 Diretrizes de Arquitetura e Código 
+Ao gerar e modificar o código, você DEVE aplicar a separação rigorosa de responsabilidades. NUNCA misture regras de negócio com detalhes de infraestrutura (como rotas HTTP ou renderização visual). Observe os exemplos abaixo de como transformar código legado em arquitetura limpa (SOLID):
 
 **Exemplo 1: Separação de Camadas (Web Backend)**
 
@@ -171,10 +204,17 @@ export function DashboardView({ metrics }) {
 
 **Passo a Passo da Refatoração:**
 
-1. **Setup da Estrutura:** Crie os diretórios lógicos para a nova arquitetura na raiz do projeto (ex: `/models`, `/controllers`, `/views`).
+1. **Setup da Estrutura:** 
+Instancie os diretórios da nova arquitetura na raiz do projeto (ex: `/models`, `/controllers`, `/views`, `/config`, `/services`).
+
+  ⚠️ REGRAS DE ARQUIVOS (APLIQUE ESTRITAMENTE):
+  **Checagem Prévia:** Antes de criar qualquer pasta ou arquivo, verifique se ele já existe na árvore de diretórios.
+  **Proibição de Duplicatas:** NUNCA crie arquivos/pastas com nomes alternativos (como controller2.py, models_novo ou anexando _refactored).
+  **Mutação In-Place:** Se o arquivo ou diretório destino já existir, você OBRIGATORIAMENTE deve reaproveitá-lo. Aplique as alterações e refatorações reescrevendo o código diretamente dentro do arquivo original (in-place).
+
 2. **Configuração e Ambiente:** Isole configurações sensíveis usando o Padrão 1 do Playbook.
 3. **Models (Camada de Dados):** Mova toda a responsabilidade de acesso a dados e persistência para esta camada.
-4. **Controllers (Regras de Negócio e Orquestração):** Extraia a lógica de aplicação para mediadores (Padrão 3 e 4).
+4. **Controllers (Regras de Negócio e Orquestração):** Extraia a lógica de aplicação para mediadores (Padrão 3 e 4). Também considere o padrão 9 para melhorias no código com relação a Improper Output Routing.
 5. **Views / Routes (Camada de Apresentação):** Limpe os arquivos de interface externa para que APENAS formatem entradas e saídas (JSON ou renderização visual).
 6. **Tratamento de Erros:** Centralize a captura de exceções (Padrão 6).
 7. **Entrypoint:** Limpe o ponto de entrada principal (Padrão 2).
