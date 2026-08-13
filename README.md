@@ -53,8 +53,9 @@ A skill foi projetada para ser **agnóstica de linguagem**.
 *   **Como garanti isso:** Na construção da skill estou passando ao modelo vários exemplos genéricos de códigos de linguagens diferentes garantiando assim que não é para ele se basear em apenas uma linguagem de programação. 
 
 ### Desafios Encontrados
-  - Na primeira iteração o modelo gerou várias pastas e arquivos duplicados, tive que alterar novamente a SKILL adicionando instruções mais claras para que isso seja evitado.
+  - Na primeira iteração o modelo gerou várias pastas e arquivos duplicados, gerando vários conflitos no start da aplicação, tive que alterar novamente a SKILL adicionando instruções mais claras para que isso seja evitado.
   - Identificação de todos os anti-patterns de cada projeto, para depois escreve-los nos arquivos de referência pensando nas melhores técnicas de prompt engineer para que o modelo execute as tarefas com precisão.
+  
 ---
 
 ## C. Resultados
