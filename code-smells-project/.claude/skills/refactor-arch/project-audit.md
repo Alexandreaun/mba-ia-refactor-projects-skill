@@ -12,21 +12,24 @@ Inspecione o código-fonte comparando-o com o catálogo de anti-patterns abaixo.
 
 ### Catálogo de Anti-Patterns e Severidades
 
-**CRITICAL (Falhas graves de arquitetura/segurança)**
+**CRITICAL**
 1. **Hardcoded Secrets & Configs:** Chaves de API, senhas, tokens ou URLs de banco de dados escritos diretamente no código-fonte em vez de variáveis de ambiente.
 2. **God Class / Monolithic Entrypoint:** Um único arquivo ou classe que mistura roteamento (ou UI), regras de negócio complexas e consultas diretas ao banco de dados ou APIs externas.
 
-**HIGH (Violações estruturais MVC/SOLID)**
+**HIGH**
 3. **Fat Controllers / Logic in View:** Controladores ou Componentes Visuais que contêm regras de negócio puras, cálculos complexos ou manipulação direta de dados, impedindo o teste unitário da regra sem carregar a interface/rede.
 4. **Tight Coupling (Forte Acoplamento):** Instanciação direta de dependências complexas (bancos de dados, serviços externos) dentro da classe consumidora, inviabilizando injeção de dependência (DI) e mocks.
+5. **Premature Server Binding:** Invocação de métodos assíncrono de forma síncrona. (ex: manager.initDb())
 
-**MEDIUM (Gargalos de performance e padronização)**
-5. **N+1 Query Problem / Inefficient Loops:** Consultas a banco de dados ou chamadas de rede feitas dentro de loops de iteração, em vez de buscar os dados em lote (batch/JOINs).
-6. **Swallowed Exceptions / Duplicated Error Handling:** Blocos `try/catch` que ignoram o erro silenciosamente ou tratamento de erro descentralizado e repetido em cada função, sem um handler global.
-7. **Deprecated/Unsafe APIs:** Uso de bibliotecas abandonadas, funções reprovadas na versão atual do framework ou algoritmos criptográficos inseguros (ex: MD5, SHA1).
+**MEDIUM**
+6. **N+1 Query Problem / Inefficient Loops:** Consultas a banco de dados ou chamadas de rede feitas dentro de loops de iteração, em vez de buscar os dados em lote (batch/JOINs).
+7. **Swallowed Exceptions / Duplicated Error Handling:** Blocos `try/catch` que ignoram o erro silenciosamente ou tratamento de erro descentralizado e repetido em cada função, sem um handler global.
+8. **Deprecated/Unsafe APIs:** Uso de bibliotecas abandonadas, funções reprovadas na versão atual do framework ou algoritmos criptográficos inseguros (ex: MD5, SHA1).
 
-**LOW (Legibilidade e Manutenção)**
-8. **Magic Numbers / Magic Strings:** Uso de valores literais soltos no código (ex: `if (status == 2)`, `setTimeout(fn, 86400000)`) sem atribuição a constantes semânticas.
+**LOW**
+9. **Magic Numbers / Magic Strings:** Uso de valores literais soltos no código (ex: `if (status == 2)`, `setTimeout(fn, 86400000)`) sem atribuição a constantes semânticas.
+10. **Nomenclatura de Variáveis inconsistentes:** Nomear variáveis com apenas uma letra (ex: let u = req.body.usr; let e = req.body.eml;)
+11. **Imports desnecessários:** Imports não utilizados poluindo o código.
 
 ---
 
@@ -49,21 +52,65 @@ Use estes padrões para preencher o campo `Recommendation` no seu relatório. Ad
 *   *Antes:* `class Payment { init() { this.api = new StripeAPI() } }`
 *   *Depois:* `class Payment { init(api: PaymentGateway) { this.api = api } }`. A dependência é injetada.
 
-**5. N+1 Queries (MEDIUM)**
+**5. Premature Server Binding (HIGH)**
+*   *Antes:* Chamando manager.initDb(); de forma síncrona
+    ```tsx
+    const app = express();
+    app.use(express.json());
+
+    const manager = new AppManager();
+    manager.initDb();
+    manager.setupRoutes(app);
+    ```
+
+*   *Depois:* Chamando manager.initDb(); de forma assíncrona
+    ```tsx
+    async function bootstrap() {
+    try {
+        const app = express();
+        app.use(express.json());
+
+        const manager = new AppManager();
+        
+        await manager.initDb(); 
+        logger.info("Banco de dados inicializado com sucesso.");
+
+        manager.setupRoutes(app);
+
+        app.listen(config.port, () => {
+            logger.info(`Frankenstein LMS rodando e pronto na porta ${config.port}...`);
+        });
+
+        } catch (error) {
+        logger.fatal({ err: error }, "Falha crítica ao iniciar a aplicação");
+        process.exit(1); 
+        }
+    }
+    ```
+
+**6. N+1 Queries (MEDIUM)**
 *   *Antes:* `for user in users: get_posts_for_user(user.id)` (100 consultas).
 *   *Depois:* `get_posts_for_users(user_ids)` (1 consulta com IN clause / Eager Loading).
 
-**6. Swallowed Exceptions (MEDIUM)**
+**7. Swallowed Exceptions (MEDIUM)**
 *   *Antes:* `try { doRiskThing() } catch (e) { print(e) }`
 *   *Depois:* A rota lança o erro nativamente e um `GlobalErrorHandler` (middleware/interceptor) captura, loga e formata a resposta padronizada para o cliente.
 
-**7. Deprecated / Unsafe APIs (MEDIUM)**
+**8. Deprecated / Unsafe APIs (MEDIUM)**
 *   *Antes:* `hash_password(input, algorithm: "MD5")`
 *   *Depois:* `hash_password(input, algorithm: "bcrypt" / "Argon2")`
 
-**8. Magic Numbers (LOW)**
+**9. Magic Numbers (LOW)**
 *   *Antes:* `if (password.length < 8)`
 *   *Depois:* `const MIN_PASSWORD_LENGTH = 8; if (password.length < MIN_PASSWORD_LENGTH)`
+
+**10. Nomenclatura de Variáveis inconsistentes (LOW)**
+*   *Antes:* `let u = req.body.usr;`
+*   *Depois:* `let user = req.body.usr`
+
+**11. Imports não utilizados (LOW)**
+*   *Antes:* `from flask import jsonify`
+*   *Depois:* ``
 
 ---
 
@@ -71,7 +118,7 @@ Use estes padrões para preencher o campo `Recommendation` no seu relatório. Ad
 Não imprima o relatório inteiro no terminal. Em vez disso:
 1. Identifique o nome da pasta raiz atual do projeto (ex: `Task-manager-api`).
 2. Verifique se o diretório `reports/` existe na raiz do projeto. Se não, crie-o.
-3. Crie e salve o relatório dentro de `reports/` utilizando o formato de nome `audit-project-<nome-da-pasta-raiz>.md` (ex: `reports/audit-project-Task-manager-api.md`).
+3. Crie e salve o relatório dentro de `reports/` utilizando o formato de nome `audit-project-<1>.md` (ex: `reports/audit-project-1.md`, `reports/audit-project-2.md`, `reports/audit-project-3.md`).
 4. Utilize EXATAMENTE a estrutura abaixo (Ordene os achados como CRITICAL → HIGH → MEDIUM → LOW):
 
 ================================
