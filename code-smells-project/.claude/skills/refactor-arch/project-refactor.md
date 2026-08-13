@@ -10,7 +10,7 @@ Utilize estritamente a **Linguagem, Framework e Dependências** identificados no
 Você tem permissão total para criar diretórios, mover arquivos, deletar códigos obsoletos e executar comandos de terminal no projeto para validação de integridade.
 
 ### Playbook de Refatoração (Padrões de Transformação)
-Ao resolver os itens do relatório `audit-project-<1>.md`, aplique as transformações abaixo adaptadas para a sintaxe da linguagem detectada na Fase 1:
+Ao resolver os itens do relatório `audit-project-{numero}.md`, aplique as transformações abaixo adaptadas para a sintaxe da linguagem detectada na Fase 1:
 
 1. **Hardcoded Secrets:**
    * *Ação:* Crie um arquivo de configuração (ex: `.env`, `.xcconfig` ou módulo de `Config`). Substitua credenciais, tokens e URLs de banco de dados soltos no código por chamadas de variáveis de ambiente.

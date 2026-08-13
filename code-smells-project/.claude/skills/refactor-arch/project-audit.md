@@ -116,10 +116,9 @@ Use estes padrões para preencher o campo `Recommendation` no seu relatório. Ad
 
 **Ação de Saída Obrigatória:**
 Não imprima o relatório inteiro no terminal. Em vez disso:
-1. Identifique o nome da pasta raiz atual do projeto (ex: `Task-manager-api`).
-2. Verifique se o diretório `reports/` existe na raiz do projeto. Se não, crie-o.
-3. Crie e salve o relatório dentro de `reports/` utilizando o formato de nome `audit-project-<1>.md` (ex: `reports/audit-project-1.md`, `reports/audit-project-2.md`, `reports/audit-project-3.md`).
-4. Utilize EXATAMENTE a estrutura abaixo (Ordene os achados como CRITICAL → HIGH → MEDIUM → LOW):
+1. Verifique se o diretório `reports/` existe na raiz do projeto. Se não, crie-o.
+2. Crie e salve cada relatório dentro do diretório `reports/`. Utilize um índice numérico sequencial e incremental para nomear os arquivos, seguindo o padrão `audit-project-{numero_sequencial}.md` (ex: `reports/audit-project-1.md`, `reports/audit-project-2.md`, `reports/audit-project-3.md`, e assim por diante).
+3. Utilize EXATAMENTE a estrutura abaixo (Ordene os achados como CRITICAL → HIGH → MEDIUM → LOW):
 
 ================================
 ARCHITECTURE AUDIT REPORT
