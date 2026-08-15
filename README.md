@@ -62,20 +62,44 @@ A skill foi projetada para ser **agnóstica de linguagem**.
 
 ### 1. Resumo dos Relatórios de Auditoria
 
+================================
+ARCHITECTURE AUDIT REPORT
+================================
+Project: code-smells-project
+Stack:   Python 3 + Flask 3.1.1 (flask-cors 5.0.1), SQLite (sqlite3 stdlib)
+Files:   4 analyzed | ~780 estimated lines of code
 
-### 2. Comparação Antes/Depois (Exemplo)
+## Summary
+CRITICAL: 4 | HIGH: 2 | MEDIUM: 3 | LOW: 4
+
+### 2. Comparação Antes/Depois
+**Project: code-smells-project**
+Estrutura de pastas antes do refactor:
+![alt text](<Pasted Graphic 14.png>)
+
+Estrutura de pastas depois do refactor:
+![alt text](image.png)
+
+---
 
 
 ### 3. Checklist de validação preenchido
 
+**Project: code-smells-project**
+## Validação:
+- `venv/bin/python -c "import app"` — importação limpa.
+- Boot real (`venv/bin/python app.py`) — subiu sem erros em http://localhost:5050, log estruturado confirmando inicialização do banco.
+- Testado via curl: GET /, /health, /produtos/1, /produtos/9999 (404), /usuarios; POST /login (sucesso e falha), /pedidos; GET /pedidos, /relatorios/vendas; POST /admin/query (404, confirmando remoção); POST /admin/reset-db — todos responderam com status/payload esperados.
+- Confirmado nos logs: notificações e reset de admin passam por `logging`, não `print`.
+- Ambiente de teste limpo após validação (loja.db e log temporário removidos).
 
 ### 4. Screenshots ou logs das aplicações rodando após refatoração.
+
+**Project: code-smells-project**
+![alt text](<Pasted Graphic 18.png>)
 
 
 ## D. Como executar
 
 **via Claude CLI:**
 /refactor-arch analise e refatore o projeto code-smells-project
-
-**via Terminal:**
-cd code-smells-project && claude -p "/refactor-arch analise e refatore o projeto code-smells-project"
