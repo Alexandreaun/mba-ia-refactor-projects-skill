@@ -86,12 +86,13 @@ Files:   3 analyzed | ~150 estimated lines of code
 CRITICAL: 2 | HIGH: 3 | MEDIUM: 3 | LOW: 2
 
 ### 2. Comparação Antes/Depois
-**Project: code-smells-project**
-Estrutura de pastas antes do refactor:
-![alt text](<Pasted Graphic 14.png>)
 
-Estrutura de pastas depois do refactor:
-![alt text](image.png)
+**Project: code-smells-project**
+## Antes e Depois
+
+| Antes do refactor | Depois do refactor |
+|:---:|:---:|
+| <img src="./Pasted Graphic 14.png" width="400"> | <img src="./image.png" width="400"> |
 
 ---
 
