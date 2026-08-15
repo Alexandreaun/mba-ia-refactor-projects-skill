@@ -1,5 +1,6 @@
 ## Fase 3 - Refatoração para MVC e Validação
 
+<Instructions>
 **Diretivas de Execução:**
 O usuário autorizou a refatoração. Sua tarefa agora é reestruturar fisicamente a base de código do projeto adotando os princípios da arquitetura MVC (Model-View-Controller) ou equivalente, aplicando as melhorias exigidas pelo relatório da Fase 2.
 
@@ -8,6 +9,12 @@ Utilize estritamente a **Linguagem, Framework e Dependências** identificados no
 
 **Autorização de Sistema de Arquivos e Terminal:**
 Você tem permissão total para criar diretórios, mover arquivos, deletar códigos obsoletos e executar comandos de terminal no projeto para validação de integridade.
+
+**Metodologia de Refatoração (Chain of Thought):**
+ANTES de modificar, criar ou mover qualquer arquivo, você DEVE utilizar a tag `<thinking>` para realizar o raciocínio lógico e planejamento da execução passo a passo:
+1. **Mapeamento de Destino:** Defina exatamente quais blocos de código irão para `/models`, `/controllers`, `/views`, `/config` ou `/services`.
+2. **Grafo de Dependências:** Identifique todos os arquivos que importam os módulos modificados. Planeje a atualização das rotas de importação (ex: atualizar de `import { x } from './utils'` para `import { x } from '../config/utils'`).
+3. **Estratégia In-Place:** Confirme quais arquivos já existem e serão apenas reescritos.
 
 ### Playbook de Refatoração (Padrões de Transformação)
 Ao resolver os itens do relatório `audit-project-{numero}.md`, aplique as transformações abaixo adaptadas para a sintaxe da linguagem detectada na Fase 1:
@@ -31,7 +38,7 @@ Ao resolver os itens do relatório `audit-project-{numero}.md`, aplique as trans
 9. **Improper Output Routing:**
    * *Ação:* Ao invés de escrever print(""), utilize o módulo built-in de log da linguagem de programação correspondente ao projeto.
 10. **Premature Server Binding:**
-   * *Ação:* Ao chamar funções assínconas utilize async/await.
+   * *Ação:* Ao chamar funções assíncronas utilize async/await.
 11. **Nomenclatura de Variáveis inconsistentes:**
    * *Ação:* Nomeie as variáveis de acordo com os dados que elas a carregam para facilitar a legibilidade.
 12. **Imports não utilizados:**
@@ -39,35 +46,90 @@ Ao resolver os itens do relatório `audit-project-{numero}.md`, aplique as trans
 
 ---
 
+**Passo a Passo da Refatoração:**
+
+1. **Setup da Estrutura:** 
+Instancie os diretórios da nova arquitetura na raiz do projeto (ex: `/models`, `/controllers`, `/views`, `/config`, `/services`).
+
+  ⚠️ REGRAS DE ARQUIVOS (APLIQUE ESTRITAMENTE):
+  **Checagem Prévia:** Antes de criar qualquer pasta ou arquivo, verifique se ele já existe na árvore de diretórios.
+  **Proibição de Duplicatas:** NUNCA crie arquivos/pastas com nomes alternativos (como controller2.py, models_novo ou anexando _refactored).
+  **Mutação In-Place:** Se o arquivo ou diretório destino já existir, você OBRIGATORIAMENTE deve reaproveitá-lo. Aplique as alterações e refatorações reescrevendo o código diretamente dentro do arquivo original (in-place).
+
+2. **Configuração e Ambiente:** Isole configurações sensíveis usando o Padrão 1 do Playbook.
+3. **Models (Camada de Dados):** Mova toda a responsabilidade de acesso a dados e persistência para esta camada.
+4. **Controllers (Regras de Negócio e Orquestração):** Extraia a lógica de aplicação para mediadores (Padrão 3 e 4). Também considere o padrão 9 para melhorias no código com relação a Improper Output Routing.
+5. **Views / Routes (Camada de Apresentação):** Limpe os arquivos de interface externa para que APENAS formatem entradas e saídas (JSON ou renderização visual).
+6. **Tratamento de Erros:** Centralize a captura de exceções (Padrão 6).
+7. **Entrypoint:** Limpe o ponto de entrada principal (Padrão 2).
+8. **Correção de Imports:** Verifique e atualize **TODOS** os caminhos de importação nos arquivos afetados.
+9. **Validação e Auto-Cura (Boot & Check):** Após finalizar as alterações, execute o comando de compilação ou inicialização no terminal compatível com a linguagem da Fase 1 (ex: `npm run build`, `python app.py`, ou `docker-compose up`). **Regra de Auto-Cura:** Se o comando falhar (ex: `ModuleNotFoundError`, erro de sintaxe), você OBRIGATORIAMENTE deve ler o log de erro, corrigir o problema de importação/sintaxe e rodar o comando novamente. Repita até que o build/boot seja concluído com sucesso.
+
+**Regras de Comportamento (Contrato):**
+- A refatoração é estritamente estrutural. O comportamento externo (fluxos de UI, caminhos de URL, payloads) NÃO pode ser alterado, salvo na resolução de vulnerabilidade crítica com aviso explícito.
+</Instructions>
+
+<Examples>
+
 ## Exemplos Práticos
 
 ### 💡 Diretrizes de Código
   
   * **❌ Código Legado Improper Output Routing
-```tsx
-print("FALHA CRÍTICA no documento")
+```python
+try:
+    process_payment()
+except Exception as e:
+    print(f"Erro ao processar pagamento: {e}")
 ```
-* **✅ Código Limpo e Refatorado - Utilizando logger.error para impressão do erro
-```tsx
-logger.error("FALHA CRÍTICA no documento")
+* **✅ Código Limpo e Refatorado - Utilizando logger.error
+```python
+import logging
+logger = logging.getLogger(__name__)
+try:
+    process_payment()
+except Exception as e:
+    logger.error("Erro ao processar pagamento: %s", e)
 ```
 
   * **❌ Código Legado Improper Output Routing
-```tsx
-print("FALHA CRÍTICA no documento")
+```java
+try {
+    processPayment();
+} catch (Exception e) {
+    System.out.println("Erro ao processar pagamento: " + e.getMessage());
+}
 ```
-* **✅ Código Limpo e Refatorado - Utilizando console.log para impressão do erro
-```tsx
-console.log("FALHA CRÍTICA no documento");
+* **✅ Código Limpo e Refatorado - O logger.error() permite que a aplicação encaminhe o erro para o sistema de logs configurado, em vez de simplesmente escrever no stdout.
+```java
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+private static final Logger logger = LoggerFactory.getLogger(PaymentService.class);
+try {
+    processPayment();
+} catch (Exception e) {
+    logger.error("Erro ao processar pagamento", e);
+}
 ```
 
   * **❌ Código Legado Improper Output Routing
-```tsx
-print("FALHA CRÍTICA no documento")
+```javascript
+try {
+    processPayment();
+} catch (error) {
+    console.log("Erro ao processar pagamento:", error);
+}
 ```
-* **✅ Código Limpo e Refatorado - Utilizando logger.debug para impressão do erro
-```tsx
-logger.debug("FALHA CRÍTICA no documento")
+* **✅ Código Limpo e Refatorado - Considerando um logger como o Pino ou Winston, a aplicação consegue estruturar e encaminhar o erro adequadamente.
+```javascript
+try {
+    processPayment();
+} catch (error) {
+    logger.error("Erro ao processar pagamento", {
+        error: error.message,
+        stack: error.stack
+    });
+}
 ```
 
 ### 💡 Diretrizes de Arquitetura e Código 
@@ -205,31 +267,17 @@ export function DashboardView({ metrics }) {
   );
 }
 ```
+</Examples>
 
----
+<Execution_Flow>
+1. Realize o planejamento na tag `<thinking>`.
+2. Refatore o código reescrevendo in-place e movendo as responsabilidades.
+3. Atualize TODOS os *imports* afetados.
+4. Execute a validação (Boot & Check) e aplique a auto-cura caso encontre erros.
+5. Apenas após garantir que o projeto roda sem quebrar, imprima a Saída.
+</Execution_Flow>
 
-**Passo a Passo da Refatoração:**
-
-1. **Setup da Estrutura:** 
-Instancie os diretórios da nova arquitetura na raiz do projeto (ex: `/models`, `/controllers`, `/views`, `/config`, `/services`).
-
-  ⚠️ REGRAS DE ARQUIVOS (APLIQUE ESTRITAMENTE):
-  **Checagem Prévia:** Antes de criar qualquer pasta ou arquivo, verifique se ele já existe na árvore de diretórios.
-  **Proibição de Duplicatas:** NUNCA crie arquivos/pastas com nomes alternativos (como controller2.py, models_novo ou anexando _refactored).
-  **Mutação In-Place:** Se o arquivo ou diretório destino já existir, você OBRIGATORIAMENTE deve reaproveitá-lo. Aplique as alterações e refatorações reescrevendo o código diretamente dentro do arquivo original (in-place).
-
-2. **Configuração e Ambiente:** Isole configurações sensíveis usando o Padrão 1 do Playbook.
-3. **Models (Camada de Dados):** Mova toda a responsabilidade de acesso a dados e persistência para esta camada.
-4. **Controllers (Regras de Negócio e Orquestração):** Extraia a lógica de aplicação para mediadores (Padrão 3 e 4). Também considere o padrão 9 para melhorias no código com relação a Improper Output Routing.
-5. **Views / Routes (Camada de Apresentação):** Limpe os arquivos de interface externa para que APENAS formatem entradas e saídas (JSON ou renderização visual).
-6. **Tratamento de Erros:** Centralize a captura de exceções (Padrão 6).
-7. **Entrypoint:** Limpe o ponto de entrada principal (Padrão 2).
-8. **Correção de Imports:** Verifique e atualize **TODOS** os caminhos de importação nos arquivos afetados.
-9. **Validação de Integridade (Boot & Check):** Após finalizar as alterações, execute um comando de compilação ou inicialização no terminal (compatível com a linguagem da Fase 1) para provar que a aplicação não quebrou por erros de sintaxe ou importação.
-
-**Regras de Comportamento (Contrato):**
-- A refatoração é estritamente estrutural. O comportamento externo (fluxos de UI, caminhos de URL, payloads) NÃO pode ser alterado, salvo na resolução de vulnerabilidade crítica com aviso explícito.
-
+<Outputs>
 **Formato de Saída Obrigatório:**
 Após compilar/validar com sucesso, imprima no terminal:
 
@@ -247,3 +295,4 @@ PHASE 3: REFACTORING COMPLETE
 - <cite o comando executado e o resultado do boot/compilação>
 ================================
 ```
+</Outputs>

@@ -1,7 +1,14 @@
 ## Fase 2 - Auditoria do Projeto
 
-**Diretivas:**
+<Instructions>
 Inspecione o código-fonte comparando-o com o catálogo de anti-patterns abaixo. O objetivo é encontrar **no mínimo 5 problemas**, incluindo obrigatoriamente pelo menos um de nível **CRITICAL** ou **HIGH**, dois de nível **MEDIUM** e dois de nível **LOW**. Baseie suas sugestões de correção no **Playbook de Transformações**.
+
+**Metodologia de Execução (Skeleton of Thought):**
+Antes de gerar e salvar o relatório final, você DEVE obrigatoriamente estruturar o seu raciocínio passo a passo utilizando uma tag `<thinking>` no terminal (esta tag não deve ir para o arquivo final). Siga estes passos internamente:
+1. **Skeleton (Rascunho):** Mapeie rapidamente todos os arquivos do projeto e crie uma lista concisa dos candidatos a anti-patterns encontrados (formato: `[Severidade] Anti-pattern - Arquivo:Linha`).
+2. **Constraint Check (Validação):** Verifique se o seu esqueleto contém exatamente/no mínimo a cota exigida (1 Critical/High, 2 Medium, 2 Low). Se faltar algum, busque novamente no código antes de avançar.
+3. **Flesh Out (Expansão):** Apenas após validar o esqueleto, expanda cada item utilizando as definições do Catálogo e as recomendações do Playbook.
+4. **Action (Ação):** Salve o resultado final no arquivo conforme as instruções de Saída.
 
 **Regras de Auditoria:**
 1. **Precisão Absoluta:** Para cada ocorrência, registre o arquivo exato e o intervalo de linhas. É estritamente proibido usar termos vagos como "em algum lugar neste arquivo".
@@ -112,14 +119,15 @@ Use estes padrões para preencher o campo `Recommendation` no seu relatório. Ad
 *   *Antes:* `from flask import jsonify`
 *   *Depois:* ``
 
----
+</Instructions>
 
-**Ação de Saída Obrigatória:**
+<Outputs>
 Não imprima o relatório inteiro no terminal. Em vez disso:
 1. Verifique se o diretório `reports/` existe na raiz do projeto. Se não, crie-o.
 2. Crie e salve cada relatório dentro do diretório `reports/`. Utilize um índice numérico sequencial e incremental para nomear os arquivos, seguindo o padrão `audit-project-{numero_sequencial}.md` (ex: `reports/audit-project-1.md`, `reports/audit-project-2.md`, `reports/audit-project-3.md`, e assim por diante).
 3. Utilize EXATAMENTE a estrutura abaixo (Ordene os achados como CRITICAL → HIGH → MEDIUM → LOW):
 
+<Template_Relatorio>
 ================================
 ARCHITECTURE AUDIT REPORT
 ================================
@@ -143,10 +151,13 @@ Recommendation: <the fix, in one or two sentences based on the Playbook>
 ================================
 Total: <n> findings
 ================================
+</Template_Relatorio>
+</Outputs>
 
----
-
-## DIRETIVA DE PARADA (HALT)
-**Pare a execução imediatamente após salvar o arquivo.** 
-1. Pergunte explicitamente ao usuário no terminal: **"Prosseguir com a refatoração (Fase 3)? [s/n]"**
-2. **NÃO modifique, crie, mova ou exclua** nenhum outro arquivo do projeto até que o usuário confirme. Não prossiga sem essa etapa.
+<Execution_Flow>
+**DIRETIVA DE PARADA (HALT):**
+Após criar e salvar o arquivo de relatório com sucesso, o agente **não deve exibir o relatório inteiro no terminal**. Em vez disso, a única resposta visível no chat/terminal deve ser:
+1. Uma linha confirmando a gravação (ex: `[OK] Relatório salvo em reports/audit-project-1.md`).
+2. A pergunta de controle explícita: **"Prosseguir com a refatoração (Fase 3)? [s/n]"**
+3. **NÃO modifique, crie, mova ou exclua** nenhum outro arquivo do projeto até que o usuário responda.
+</Execution_Flow>

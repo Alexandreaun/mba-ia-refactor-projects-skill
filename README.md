@@ -55,7 +55,7 @@ A skill foi projetada para ser **agnóstica de linguagem**.
 ### Desafios Encontrados
   - Na primeira iteração o modelo gerou várias pastas e arquivos duplicados, gerando vários conflitos no start da aplicação, tive que alterar novamente a SKILL adicionando instruções mais claras para que isso seja evitado.
   - Identificação de todos os anti-patterns de cada projeto, para depois escreve-los nos arquivos de referência pensando nas melhores técnicas de prompt engineer para que o modelo execute as tarefas com precisão.
-  
+
 ---
 
 ## C. Resultados
@@ -73,3 +73,9 @@ A skill foi projetada para ser **agnóstica de linguagem**.
 
 
 ## D. Como executar
+
+**via Claude CLI:**
+/refactor-arch analise e refatore o projeto code-smells-project
+
+**via Terminal:**
+cd code-smells-project && claude -p "/refactor-arch analise e refatore o projeto code-smells-project"
