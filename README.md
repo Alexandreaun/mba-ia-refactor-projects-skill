@@ -42,11 +42,9 @@
 
 ### Seleção de Anti-patterns
 
-Anti-patterns incluídos com base 
-Priorizamos a inclusão dos anti-patterns catalogados na Seção A porque eles representam as três frentes principais da engenharia moderna:
-*   **Segurança:** (Vazamento de Dados) - Protege o negócio.
-*   **Escalabilidade:** (N+1 e Transações) - Protege a infraestrutura.
-*   **Manutenibilidade:** (Logging e Dead Code) - Protege a saúde mental do time.
+Anti-patterns incluídos:
+*   **Segurança:** 
+
 
 ### Agnosticismo de Tecnologia
 A skill foi projetada para ser **agnóstica de linguagem**. 
@@ -72,7 +70,6 @@ CRITICAL: 4 | HIGH: 2 | MEDIUM: 3 | LOW: 4
 
 ---
 
-
 **ARCHITECTURE AUDIT REPORT**
 - Project: ecommerce-api-legacy
 - Stack:   Node.js + Express.js (sqlite3)
@@ -80,6 +77,16 @@ CRITICAL: 4 | HIGH: 2 | MEDIUM: 3 | LOW: 4
 
 ## Summary
 CRITICAL: 2 | HIGH: 3 | MEDIUM: 3 | LOW: 2
+
+---
+
+**ARCHITECTURE AUDIT REPORT**
+- Project: task-manager-api
+- Stack:   Python 3.11 + Flask 3.0 (Blueprints) + Flask-SQLAlchemy
+- Files:   15 analyzed | ~1170 estimated lines of code
+
+## Summary
+CRITICAL: 2 | HIGH: 2 | MEDIUM: 3 | LOW: 3
 
 ### 2. Comparação Antes/Depois
 
@@ -99,6 +106,15 @@ CRITICAL: 2 | HIGH: 3 | MEDIUM: 3 | LOW: 2
 |:---:|:---:|
 | <img src="./JS app.js.png" width="400"> | <img src="./Pasted Graphic 21.png" width="400"> |
 
+---
+
+**Project: task-manager-api**
+## Antes e Depois
+
+| Antes do refactor | Depois do refactor |
+|:---:|:---:|
+| <img src="./› _pycache_.png" width="400"> | <img src="./Pasted Graphic 25.png" width="400"> |
+
 ### 3. Checklist de validação preenchido
 
 **Project: code-smells-project**
@@ -110,6 +126,7 @@ CRITICAL: 2 | HIGH: 3 | MEDIUM: 3 | LOW: 2
 - Ambiente de teste limpo após validação (loja.db e log temporário removidos).
 
 ---
+
 **Project: ecommerce-api-legacy**
 ## Validação:
 - `npm install` → 1 pacote novo (bcryptjs) instalado com sucesso, sem erros de build.
@@ -124,6 +141,26 @@ CRITICAL: 2 | HIGH: 3 | MEDIUM: 3 | LOW: 2
   - GET /api/admin/financial-report (após delete) → "Unknown" corretamente reportado para matrícula órfã, sem crash
 - Nenhuma regressão de contrato externo (mesmas rotas, mesmos status codes, mesmos formatos de payload).
 
+---
+
+**Project: task-manager-api**
+## Validação:
+- `venv/bin/python seed.py` → "Seed concluído com sucesso! 3 usuários / 4 categorias / 10 tasks" (senha agora hasheada via werkzeug)
+- `venv/bin/python app.py` → boot limpo em http://127.0.0.1:5051, sem erros de import/sintaxe
+- Endpoints testados via curl, cobrindo os 3 domínios (tasks, users, reports/categories):
+  - GET /health → 200
+  - GET /tasks → 200, com overdue/user_name/category_name corretos via eager loading (sem N+1)
+  - GET /tasks/1 → 200; GET /tasks/9999 → 404 "Task não encontrada"
+  - POST /tasks (título curto) → 400 "Título muito curto"; POST /tasks (válido) → 201
+  - GET /tasks/search?status=pending → 200; GET /tasks/stats → 200
+  - POST /users (email inválido) → 400 "Email inválido"
+  - POST /login (senha certa) → 200 com token fake; POST /login (senha errada) → 401 "Credenciais inválidas" (hash MD5→werkzeug validado)
+  - GET /users, GET /users/1/tasks → 200
+  - DELETE /users/2 → 200 "Usuário deletado com sucesso", com cascade de tasks confirmado (GET /tasks não retorna mais tasks do user 2)
+  - GET /reports/summary → 200, user_productivity correto após a exclusão em cascata (2 queries totais, sem N+1)
+  - GET /reports/user/1 → 200; GET /categories → 200
+  - GET /rota-que-nao-existe → 404 HTML nativo do Flask preservado (confirma que o error handler global não interceptou HTTPException)
+- Nenhuma regressão de contrato externo (mesmas rotas, mesmos status codes, mesmos formatos de payload; porta 5051 mantida).
 
 ### 4. Screenshots ou logs das aplicações rodando após refatoração.
 
@@ -132,20 +169,27 @@ CRITICAL: 2 | HIGH: 3 | MEDIUM: 3 | LOW: 2
 ---
 **Project: ecommerce-api-legacy**
 ![alt text](<Pasted Graphic 23.png>)
+---
+**Project: task-manager-api**
+![alt text](message.png)
 
 ## D. Como executar
 
 **Pré-requisitos:**
+- ter uma conta Claude - subscription
+
 - instale as dependências de cada projeto, exemplo:
 **code-smells-project e task-manager-api:**
 - python3 -m venv venv (instalar o ambiente virtual isolado para o projeto)
 - source venv/bin/activate
+- pip install flask (para task-manager-api)
 - pip install -r requirements.txt
 - pip freeze > requirements.txt
 - python3 app.py
 
 **ecommerce-api-legacy:**
-- npm install
+- com o node instalado
+- npm install (rodar no mesmo diretório do arquivo package.json)
 - npm start
 
 **Comandos para executar a Skill em cada projeto:**
