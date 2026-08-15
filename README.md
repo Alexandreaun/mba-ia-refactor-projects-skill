@@ -38,7 +38,7 @@
 ## B. Construção da Skill
 
 ### Decisões de Design
-*  Skill construida com base em técnicas avançadas de prompt engineer, como: Role Prompting, Few-shot learn e chain of thought.
+*  Skill construída com base em técnicas avançadas de prompt engineering, como: Role Prompting, Few-shot learn, chain of thought e skeleton of thought. Role Prompting, Few-shot learn e chain of thought usei para criar a skill de orquestração definindo Persona e escopo, few-shot com exemplos de acionamento dos arquivos de referência e chain of thought com a técnica `<thinking>` forçando assim o agente a raciocinar passo a passo antes de executar todas as fases garantindo que o agente não pule nenhuma fase. Para a skill de auditoria utilizei a técnica Skeleton of Thought com `<thinking>` forçando também o agente a criar um esqueleto mental antes de gerar o relatório final. Para a skill de refactor do projeto utilizei as técnicas Chain of Thought com  `<thinking>` forçando assim o agente a raciocinar passo a passo antes de modificar as pastas e arquivos para garantir que não haja nenhuma duplicidade de arquivos e que as dependências sejam inseridas nos arquivos corretos.
 
 ### Seleção de Anti-patterns
 
@@ -53,7 +53,7 @@ A skill foi projetada para ser **agnóstica de linguagem**.
 *   **Como garanti isso:** Na construção da skill estou passando ao modelo vários exemplos genéricos de códigos de linguagens diferentes garantiando assim que não é para ele se basear em apenas uma linguagem de programação. 
 
 ### Desafios Encontrados
-  - Na primeira iteração o modelo gerou várias pastas e arquivos duplicados, gerando vários conflitos no start da aplicação, tive que alterar novamente a SKILL adicionando instruções mais claras para que isso seja evitado.
+  - Na primeira iteração o modelo gerou várias pastas e arquivos duplicados, gerando vários conflitos no start da aplicação, tive que alterar novamente a SKILL adicionando instruções mais claras e técnica de CoT, para que isso seja evitado.
   - Identificação de todos os anti-patterns de cada projeto, para depois escreve-los nos arquivos de referência pensando nas melhores técnicas de prompt engineer para que o modelo execute as tarefas com precisão.
 
 ---
