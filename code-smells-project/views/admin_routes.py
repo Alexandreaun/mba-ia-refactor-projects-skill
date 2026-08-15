@@ -1,0 +1,9 @@
+from flask import Blueprint
+
+
+def create_admin_blueprint(controller):
+    bp = Blueprint("admin", __name__)
+    bp.add_url_rule("/", "index", controller.index, methods=["GET"])
+    bp.add_url_rule("/health", "health_check", controller.health_check, methods=["GET"])
+    bp.add_url_rule("/admin/reset-db", "reset_database", controller.reset_database, methods=["POST"])
+    return bp

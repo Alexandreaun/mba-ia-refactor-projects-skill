@@ -1,0 +1,13 @@
+CATEGORIAS_VALIDAS = ["informatica", "moveis", "vestuario", "geral", "eletronicos", "livros"]
+
+STATUS_PEDIDO_VALIDOS = ["pendente", "aprovado", "enviado", "entregue", "cancelado"]
+
+NOME_PRODUTO_MIN_LENGTH = 2
+NOME_PRODUTO_MAX_LENGTH = 200
+
+DESCONTO_FAIXA_1_LIMIAR = 10000
+DESCONTO_FAIXA_1_TAXA = 0.10
+DESCONTO_FAIXA_2_LIMIAR = 5000
+DESCONTO_FAIXA_2_TAXA = 0.05
+DESCONTO_FAIXA_3_LIMIAR = 1000
+DESCONTO_FAIXA_3_TAXA = 0.02
