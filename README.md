@@ -164,13 +164,15 @@ CRITICAL: 2 | HIGH: 2 | MEDIUM: 3 | LOW: 3
 
 ### 4. Screenshots ou logs das aplicações rodando após refatoração.
 
-**Project: code-smells-project**
-![alt text](<Pasted Graphic 18.png>)
+| **Project: code-smells-project**
+|:---:
+| <img src="./Pasted Graphic 18.png" width="400"> |
 
 ---
 
-**Project: ecommerce-api-legacy**
-![alt text](<Pasted Graphic 23.png>)
+| **Project: ecommerce-api-legacy**
+|:---:
+| <img src="./Pasted Graphic 23.png" width="400"> |
 
 ---
 
