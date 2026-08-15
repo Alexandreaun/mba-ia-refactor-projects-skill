@@ -62,9 +62,7 @@ A skill foi projetada para ser **agnóstica de linguagem**.
 
 ### 1. Resumo dos Relatórios de Auditoria
 
-================================
-ARCHITECTURE AUDIT REPORT
-================================
+**ARCHITECTURE AUDIT REPORT**
 - Project: code-smells-project
 - Stack:   Python 3 + Flask 3.1.1 (flask-cors 5.0.1), SQLite (sqlite3 stdlib)
 - Files:   4 analyzed | ~780 estimated lines of code
@@ -74,9 +72,8 @@ CRITICAL: 4 | HIGH: 2 | MEDIUM: 3 | LOW: 4
 
 ---
 
-================================
-ARCHITECTURE AUDIT REPORT
-================================
+
+**ARCHITECTURE AUDIT REPORT**
 - Project: ecommerce-api-legacy
 - Stack:   Node.js + Express.js (sqlite3)
 - Files:   3 analyzed | ~150 estimated lines of code
