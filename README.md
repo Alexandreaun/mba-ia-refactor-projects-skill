@@ -193,10 +193,10 @@ CRITICAL: 2 | HIGH: 2 | MEDIUM: 3 | LOW: 3
 - npm start
 
 **Comandos para executar a Skill em cada projeto:**
-**via Claude CLI:**
-/refactor-arch analise e refatore o projeto code-smells-project
-/refactor-arch analise e refatore o projeto ecommerce-api-legacy
-/refactor-arch analise e refatore o projeto task-manager-api
+> **via Claude CLI:**
+- /refactor-arch analise e refatore o projeto code-smells-project
+- /refactor-arch analise e refatore o projeto ecommerce-api-legacy
+- /refactor-arch analise e refatore o projeto task-manager-api
 
 **Como validar o funcionamento:**
 - compare os arquivos gerados/alterados após a refatoração com os arquivos do projeto antigo, veja a estrutura de pastas e código baseado na arquitetura MVC e todas as melhorias de código aplicadas com base nos anti-patterns listados na skill project-audit.md
