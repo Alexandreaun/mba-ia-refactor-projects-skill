@@ -72,6 +72,19 @@ Files:   4 analyzed | ~780 estimated lines of code
 ## Summary
 CRITICAL: 4 | HIGH: 2 | MEDIUM: 3 | LOW: 4
 
+---
+
+Resumo
+================================
+ARCHITECTURE AUDIT REPORT
+================================
+Project: ecommerce-api-legacy
+Stack:   Node.js + Express.js (sqlite3)
+Files:   3 analyzed | ~150 estimated lines of code
+
+## Summary
+CRITICAL: 2 | HIGH: 3 | MEDIUM: 3 | LOW: 2
+
 ### 2. Comparação Antes/Depois
 **Project: code-smells-project**
 Estrutura de pastas antes do refactor:
@@ -82,6 +95,12 @@ Estrutura de pastas depois do refactor:
 
 ---
 
+**Project: ecommerce-api-legacy**
+## Antes e Depois
+
+| Antes do refactor | Depois do refactor |
+|:---:|:---:|
+| <img src="![alt text](<JS app.js.png>)" width="400"> | <img src="![alt text](<Pasted Graphic 21.png>)" width="400"> |
 
 ### 3. Checklist de validação preenchido
 
@@ -93,13 +112,50 @@ Estrutura de pastas depois do refactor:
 - Confirmado nos logs: notificações e reset de admin passam por `logging`, não `print`.
 - Ambiente de teste limpo após validação (loja.db e log temporário removidos).
 
+---
+**Project: ecommerce-api-legacy**
+## Validação:
+- `npm install` → 1 pacote novo (bcryptjs) instalado com sucesso, sem erros de build.
+- `npm start` → boot limpo, log: "Banco de dados inicializado com sucesso." + "Frankenstein LMS rodando e pronto na porta 3000...".
+- Requisições de `api.http` testadas via curl, mesmos endpoints/portas/payloads da versão original:
+  - POST /api/checkout (novo usuário, cartão Visa) → 200 {"msg":"Sucesso","enrollment_id":2}
+  - POST /api/checkout (cartão não-Visa) → 400 "Pagamento recusado"
+  - POST /api/checkout (payload incompleto) → 400 "Bad Request"
+  - POST /api/checkout (curso inexistente) → 404 "Curso não encontrado"
+  - GET /api/admin/financial-report → 200, valores agregados corretos (via JOIN, sem N+1)
+  - DELETE /api/users/1 → 200 "Usuário deletado, mas as matrículas e pagamentos ficaram sujos no banco."
+  - GET /api/admin/financial-report (após delete) → "Unknown" corretamente reportado para matrícula órfã, sem crash
+- Nenhuma regressão de contrato externo (mesmas rotas, mesmos status codes, mesmos formatos de payload).
+
+
 ### 4. Screenshots ou logs das aplicações rodando após refatoração.
 
 **Project: code-smells-project**
 ![alt text](<Pasted Graphic 18.png>)
-
+---
+**Project: ecommerce-api-legacy**
+![alt text](<Pasted Graphic 23.png>)
 
 ## D. Como executar
 
+**Pré-requisitos:**
+- instale as dependências de cada projeto, exemplo:
+- code-smells-project e task-manager-api:
+python3 -m venv venv (instalar o ambiente virtual isolado para o projeto)
+source venv/bin/activate
+pip install -r requirements.txt
+pip freeze > requirements.txt
+python3 app.py
+
+- ecommerce-api-legacy:
+instalar node
+npm install
+npm run dev
+
+**Comandos para executar a Skill em cada projeto:**
 **via Claude CLI:**
 /refactor-arch analise e refatore o projeto code-smells-project
+/refactor-arch analise e refatore o projeto ecommerce-api-legacy
+/refactor-arch analise e refatore o projeto task-manager-api
+
+**Como validar o funcionamento:**
