@@ -100,7 +100,7 @@ Estrutura de pastas depois do refactor:
 
 | Antes do refactor | Depois do refactor |
 |:---:|:---:|
-| <img src="![alt text](<JS app.js.png>)" width="400"> | <img src="![alt text](<Pasted Graphic 21.png>)" width="400"> |
+| <img src="./JS app.js.png" width="400"> | <img src="./Pasted Graphic 21.png" width="400"> |
 
 ### 3. Checklist de validação preenchido
 
