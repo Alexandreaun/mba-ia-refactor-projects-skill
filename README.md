@@ -50,7 +50,7 @@ Priorizamos a inclusão dos anti-patterns catalogados na Seção A porque eles r
 
 ### Agnosticismo de Tecnologia
 A skill foi projetada para ser **agnóstica de linguagem**. 
-*   **Como garanti isso:** Na construção da skill estou passando ao modelo vários exemplos genéricos de códigos de linguagens diferentes garantiando assim que não é para ele se basear em apenas uma linguagem de programação. 
+*   **Como garanti isso:** Na construção da skill estou passando ao agente vários exemplos genéricos de códigos de linguagens diferentes garantiando assim que não é para se basear em apenas uma linguagem de programação. Também referenciei a linguagem de programação identificada na skill project-analysis como base para executar o refactor, portanto a fase 1 está diretamente ligada a fase 3.
 
 ### Desafios Encontrados
   - Na primeira iteração o modelo gerou várias pastas e arquivos duplicados, gerando vários conflitos no start da aplicação, tive que alterar novamente a SKILL adicionando instruções mais claras e técnica de CoT, para que isso seja evitado.
@@ -65,22 +65,21 @@ A skill foi projetada para ser **agnóstica de linguagem**.
 ================================
 ARCHITECTURE AUDIT REPORT
 ================================
-Project: code-smells-project
-Stack:   Python 3 + Flask 3.1.1 (flask-cors 5.0.1), SQLite (sqlite3 stdlib)
-Files:   4 analyzed | ~780 estimated lines of code
+- Project: code-smells-project
+- Stack:   Python 3 + Flask 3.1.1 (flask-cors 5.0.1), SQLite (sqlite3 stdlib)
+- Files:   4 analyzed | ~780 estimated lines of code
 
 ## Summary
 CRITICAL: 4 | HIGH: 2 | MEDIUM: 3 | LOW: 4
 
 ---
 
-Resumo
 ================================
 ARCHITECTURE AUDIT REPORT
 ================================
-Project: ecommerce-api-legacy
-Stack:   Node.js + Express.js (sqlite3)
-Files:   3 analyzed | ~150 estimated lines of code
+- Project: ecommerce-api-legacy
+- Stack:   Node.js + Express.js (sqlite3)
+- Files:   3 analyzed | ~150 estimated lines of code
 
 ## Summary
 CRITICAL: 2 | HIGH: 3 | MEDIUM: 3 | LOW: 2
@@ -141,17 +140,16 @@ CRITICAL: 2 | HIGH: 3 | MEDIUM: 3 | LOW: 2
 
 **Pré-requisitos:**
 - instale as dependências de cada projeto, exemplo:
-- code-smells-project e task-manager-api:
-python3 -m venv venv (instalar o ambiente virtual isolado para o projeto)
-source venv/bin/activate
-pip install -r requirements.txt
-pip freeze > requirements.txt
-python3 app.py
+**code-smells-project e task-manager-api:**
+- python3 -m venv venv (instalar o ambiente virtual isolado para o projeto)
+- source venv/bin/activate
+- pip install -r requirements.txt
+- pip freeze > requirements.txt
+- python3 app.py
 
-- ecommerce-api-legacy:
-instalar node
-npm install
-npm run dev
+**ecommerce-api-legacy:**
+- npm install
+- npm start
 
 **Comandos para executar a Skill em cada projeto:**
 **via Claude CLI:**
@@ -160,3 +158,4 @@ npm run dev
 /refactor-arch analise e refatore o projeto task-manager-api
 
 **Como validar o funcionamento:**
+- compare os arquivos gerados/alterados após a refatoração com os arquivos do projeto antigo, veja a estrutura de pastas e código baseado na arquitetura MVC e todas as melhorias de código aplicadas com base nos anti-patterns listados na skill project-audit.md
