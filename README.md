@@ -166,12 +166,17 @@ CRITICAL: 2 | HIGH: 2 | MEDIUM: 3 | LOW: 3
 
 **Project: code-smells-project**
 ![alt text](<Pasted Graphic 18.png>)
+
 ---
+
 **Project: ecommerce-api-legacy**
 ![alt text](<Pasted Graphic 23.png>)
+
 ---
-**Project: task-manager-api**
-![alt text](message.png)
+
+| **Project: task-manager-api**
+|:---:
+| <img src="./message.png" width="400"> |
 
 ## D. Como executar
 
