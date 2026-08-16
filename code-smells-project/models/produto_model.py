@@ -80,6 +80,12 @@ class ProdutoModel:
         estoque = dados["estoque"]
         categoria = dados.get("categoria", CATEGORIA_PADRAO)
 
+        if not isinstance(nome, str):
+            return "Nome deve ser texto"
+        if not isinstance(preco, (int, float)) or isinstance(preco, bool):
+            return "Preço deve ser numérico"
+        if not isinstance(estoque, int) or isinstance(estoque, bool):
+            return "Estoque deve ser um número inteiro"
         if preco < 0:
             return "Preço não pode ser negativo"
         if estoque < 0:

@@ -29,6 +29,10 @@ class PedidoController:
             return error("Usuario ID é obrigatório", 400)
         if not itens:
             return error("Pedido deve ter pelo menos 1 item", 400)
+        for item in itens:
+            quantidade = item.get("quantidade")
+            if not isinstance(quantidade, int) or isinstance(quantidade, bool) or quantidade <= 0:
+                return error("Quantidade inválida para o item", 400)
 
         resultado = self.pedido_model.criar(usuario_id, itens)
         if "erro" in resultado:

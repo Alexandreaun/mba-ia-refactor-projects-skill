@@ -3,7 +3,7 @@ import sqlite3
 
 from werkzeug.security import generate_password_hash
 
-from constants import TIPO_USUARIO_ADMIN, TIPO_USUARIO_PADRAO
+from constants import STATUS_PENDENTE, TIPO_USUARIO_ADMIN, TIPO_USUARIO_PADRAO
 
 logger = logging.getLogger(__name__)
 
@@ -37,21 +37,21 @@ class Database:
                 criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         """)
-        cursor.execute("""
+        cursor.execute(f"""
             CREATE TABLE IF NOT EXISTS usuarios (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 nome TEXT,
                 email TEXT,
                 senha TEXT,
-                tipo TEXT DEFAULT 'cliente',
+                tipo TEXT DEFAULT '{TIPO_USUARIO_PADRAO}',
                 criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         """)
-        cursor.execute("""
+        cursor.execute(f"""
             CREATE TABLE IF NOT EXISTS pedidos (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 usuario_id INTEGER,
-                status TEXT DEFAULT 'pendente',
+                status TEXT DEFAULT '{STATUS_PENDENTE}',
                 total REAL,
                 criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )

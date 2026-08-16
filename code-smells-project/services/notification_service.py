@@ -1,5 +1,7 @@
 import logging
 
+from constants import STATUS_APROVADO, STATUS_CANCELADO
+
 logger = logging.getLogger(__name__)
 
 
@@ -10,7 +12,7 @@ def notificar_pedido_criado(pedido_id, usuario_id):
 
 
 def notificar_mudanca_status(pedido_id, novo_status):
-    if novo_status == "aprovado":
+    if novo_status == STATUS_APROVADO:
         logger.info("Notificação: pedido %s foi aprovado, preparar envio", pedido_id)
-    if novo_status == "cancelado":
+    if novo_status == STATUS_CANCELADO:
         logger.info("Notificação: pedido %s cancelado, devolver estoque", pedido_id)
