@@ -115,7 +115,7 @@ CRITICAL: 2 | HIGH: 2 | MEDIUM: 3 | LOW: 3
 
 | Antes do refactor | Depois do refactor |
 |:---:|:---:|
-| <img src="./Pasted Graphic 14.png" width="400"> | <img src="./image.png" width="400"> |
+| <img src="./images/Pasted Graphic 14.png" width="400"> | <img src="./images/image.png" width="400"> |
 
 ---
 
@@ -124,7 +124,7 @@ CRITICAL: 2 | HIGH: 2 | MEDIUM: 3 | LOW: 3
 
 | Antes do refactor | Depois do refactor |
 |:---:|:---:|
-| <img src="./JS app.js.png" width="400"> | <img src="./Pasted Graphic 21.png" width="400"> |
+| <img src="./images/JS app.js.png" width="400"> | <img src="./images/Pasted Graphic 21.png" width="400"> |
 
 ---
 
@@ -133,7 +133,7 @@ CRITICAL: 2 | HIGH: 2 | MEDIUM: 3 | LOW: 3
 
 | Antes do refactor | Depois do refactor |
 |:---:|:---:|
-| <img src="./› _pycache_.png" width="400"> | <img src="./Pasted Graphic 25.png" width="400"> |
+| <img src="./images/› _pycache_.png" width="400"> | <img src="./images/Pasted Graphic 25.png" width="400"> |
 
 ### 3. Checklist de validação preenchido
 
