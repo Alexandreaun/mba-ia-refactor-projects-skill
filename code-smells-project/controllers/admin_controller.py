@@ -6,8 +6,9 @@ logger = logging.getLogger(__name__)
 
 
 class AdminController:
-    def __init__(self, db):
-        self.db = db
+    def __init__(self, admin_model, db_path):
+        self.admin_model = admin_model
+        self.db_path = db_path
 
     def index(self):
         return jsonify({
@@ -24,39 +25,20 @@ class AdminController:
         })
 
     def reset_database(self):
-        conn = self.db.get_connection()
-        cursor = conn.cursor()
-        cursor.execute("DELETE FROM itens_pedido")
-        cursor.execute("DELETE FROM pedidos")
-        cursor.execute("DELETE FROM produtos")
-        cursor.execute("DELETE FROM usuarios")
-        conn.commit()
+        self.admin_model.reset_all()
         logger.warning("Banco de dados resetado via /admin/reset-db")
         return jsonify({"mensagem": "Banco de dados resetado", "sucesso": True}), 200
 
     def health_check(self):
         try:
-            conn = self.db.get_connection()
-            cursor = conn.cursor()
-            cursor.execute("SELECT 1")
-            cursor.execute("SELECT COUNT(*) FROM produtos")
-            produtos = cursor.fetchone()[0]
-            cursor.execute("SELECT COUNT(*) FROM usuarios")
-            usuarios = cursor.fetchone()[0]
-            cursor.execute("SELECT COUNT(*) FROM pedidos")
-            pedidos = cursor.fetchone()[0]
-
+            counts = self.admin_model.get_counts()
             return jsonify({
                 "status": "ok",
                 "database": "connected",
-                "counts": {
-                    "produtos": produtos,
-                    "usuarios": usuarios,
-                    "pedidos": pedidos,
-                },
+                "counts": counts,
                 "versao": "1.0.0",
                 "ambiente": "producao",
-                "db_path": self.db.db_path,
+                "db_path": self.db_path,
             }), 200
         except Exception:
             logger.exception("Falha no health check")

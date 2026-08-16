@@ -5,6 +5,9 @@ from constants import (
     DESCONTO_FAIXA_2_TAXA,
     DESCONTO_FAIXA_3_LIMIAR,
     DESCONTO_FAIXA_3_TAXA,
+    STATUS_APROVADO,
+    STATUS_CANCELADO,
+    STATUS_PENDENTE,
 )
 
 
@@ -16,21 +19,23 @@ class PedidoModel:
         conn = self.db.get_connection()
         cursor = conn.cursor()
 
+        produto_ids = [item["produto_id"] for item in itens]
+        placeholders = ",".join("?" for _ in produto_ids)
+        cursor.execute(f"SELECT * FROM produtos WHERE id IN ({placeholders})", produto_ids)
+        produtos_por_id = {row["id"]: row for row in cursor.fetchall()}
+
         total = 0
-        produtos_por_id = {}
         for item in itens:
-            cursor.execute("SELECT * FROM produtos WHERE id = ?", (item["produto_id"],))
-            produto = cursor.fetchone()
+            produto = produtos_por_id.get(item["produto_id"])
             if produto is None:
                 return {"erro": f"Produto {item['produto_id']} não encontrado"}
             if produto["estoque"] < item["quantidade"]:
                 return {"erro": f"Estoque insuficiente para {produto['nome']}"}
-            produtos_por_id[item["produto_id"]] = produto
             total += produto["preco"] * item["quantidade"]
 
         cursor.execute(
-            "INSERT INTO pedidos (usuario_id, status, total) VALUES (?, 'pendente', ?)",
-            (usuario_id, total),
+            "INSERT INTO pedidos (usuario_id, status, total) VALUES (?, ?, ?)",
+            (usuario_id, STATUS_PENDENTE, total),
         )
         pedido_id = cursor.lastrowid
 
@@ -113,13 +118,13 @@ class PedidoModel:
         cursor.execute("SELECT SUM(total) FROM pedidos")
         faturamento = cursor.fetchone()[0] or 0
 
-        cursor.execute("SELECT COUNT(*) FROM pedidos WHERE status = 'pendente'")
+        cursor.execute("SELECT COUNT(*) FROM pedidos WHERE status = ?", (STATUS_PENDENTE,))
         pendentes = cursor.fetchone()[0]
 
-        cursor.execute("SELECT COUNT(*) FROM pedidos WHERE status = 'aprovado'")
+        cursor.execute("SELECT COUNT(*) FROM pedidos WHERE status = ?", (STATUS_APROVADO,))
         aprovados = cursor.fetchone()[0]
 
-        cursor.execute("SELECT COUNT(*) FROM pedidos WHERE status = 'cancelado'")
+        cursor.execute("SELECT COUNT(*) FROM pedidos WHERE status = ?", (STATUS_CANCELADO,))
         cancelados = cursor.fetchone()[0]
 
         desconto = 0

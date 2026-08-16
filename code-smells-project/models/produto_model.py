@@ -1,3 +1,6 @@
+from constants import CATEGORIA_PADRAO, CATEGORIAS_VALIDAS, NOME_PRODUTO_MAX_LENGTH, NOME_PRODUTO_MIN_LENGTH
+
+
 class ProdutoModel:
     def __init__(self, db):
         self.db = db
@@ -60,6 +63,34 @@ class ProdutoModel:
 
         cursor.execute(query, params)
         return [self._to_dict(row) for row in cursor.fetchall()]
+
+    @staticmethod
+    def validar_dados(dados):
+        if not dados:
+            return "Dados inválidos"
+        if "nome" not in dados:
+            return "Nome é obrigatório"
+        if "preco" not in dados:
+            return "Preço é obrigatório"
+        if "estoque" not in dados:
+            return "Estoque é obrigatório"
+
+        nome = dados["nome"]
+        preco = dados["preco"]
+        estoque = dados["estoque"]
+        categoria = dados.get("categoria", CATEGORIA_PADRAO)
+
+        if preco < 0:
+            return "Preço não pode ser negativo"
+        if estoque < 0:
+            return "Estoque não pode ser negativo"
+        if len(nome) < NOME_PRODUTO_MIN_LENGTH:
+            return "Nome muito curto"
+        if len(nome) > NOME_PRODUTO_MAX_LENGTH:
+            return "Nome muito longo"
+        if categoria not in CATEGORIAS_VALIDAS:
+            return f"Categoria inválida. Válidas: {CATEGORIAS_VALIDAS}"
+        return None
 
     @staticmethod
     def _to_dict(row):

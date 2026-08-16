@@ -10,6 +10,7 @@ from controllers.produto_controller import ProdutoController
 from controllers.relatorio_controller import RelatorioController
 from controllers.usuario_controller import UsuarioController
 from errors import register_error_handlers
+from models.admin_model import AdminModel
 from models.database import Database
 from models.pedido_model import PedidoModel
 from models.produto_model import ProdutoModel
@@ -36,12 +37,13 @@ def create_app():
     produto_model = ProdutoModel(db)
     usuario_model = UsuarioModel(db)
     pedido_model = PedidoModel(db)
+    admin_model = AdminModel(db)
 
     produto_controller = ProdutoController(produto_model)
     usuario_controller = UsuarioController(usuario_model)
     pedido_controller = PedidoController(pedido_model)
     relatorio_controller = RelatorioController(pedido_model)
-    admin_controller = AdminController(db)
+    admin_controller = AdminController(admin_model, db.db_path)
 
     app.register_blueprint(create_produto_blueprint(produto_controller))
     app.register_blueprint(create_usuario_blueprint(usuario_controller))

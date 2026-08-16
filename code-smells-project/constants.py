@@ -1,6 +1,12 @@
-CATEGORIAS_VALIDAS = ["informatica", "moveis", "vestuario", "geral", "eletronicos", "livros"]
+CATEGORIA_PADRAO = "geral"
+CATEGORIAS_VALIDAS = ["informatica", "moveis", "vestuario", CATEGORIA_PADRAO, "eletronicos", "livros"]
 
-STATUS_PEDIDO_VALIDOS = ["pendente", "aprovado", "enviado", "entregue", "cancelado"]
+STATUS_PENDENTE = "pendente"
+STATUS_APROVADO = "aprovado"
+STATUS_ENVIADO = "enviado"
+STATUS_ENTREGUE = "entregue"
+STATUS_CANCELADO = "cancelado"
+STATUS_PEDIDO_VALIDOS = [STATUS_PENDENTE, STATUS_APROVADO, STATUS_ENVIADO, STATUS_ENTREGUE, STATUS_CANCELADO]
 
 NOME_PRODUTO_MIN_LENGTH = 2
 NOME_PRODUTO_MAX_LENGTH = 200
