@@ -6,9 +6,10 @@ logger = logging.getLogger(__name__)
 
 
 class AdminController:
-    def __init__(self, admin_model, db_path):
+    def __init__(self, admin_model, db_path, ambiente):
         self.admin_model = admin_model
         self.db_path = db_path
+        self.ambiente = ambiente
 
     def index(self):
         return jsonify({
@@ -37,7 +38,7 @@ class AdminController:
                 "database": "connected",
                 "counts": counts,
                 "versao": "1.0.0",
-                "ambiente": "producao",
+                "ambiente": self.ambiente,
                 "db_path": self.db_path,
             }), 200
         except Exception:

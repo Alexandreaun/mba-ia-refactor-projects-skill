@@ -3,6 +3,8 @@ import sqlite3
 
 from werkzeug.security import generate_password_hash
 
+from constants import TIPO_USUARIO_ADMIN, TIPO_USUARIO_PADRAO
+
 logger = logging.getLogger(__name__)
 
 
@@ -89,9 +91,9 @@ class Database:
         )
 
         usuarios = [
-            ("Admin", "admin@loja.com", generate_password_hash("admin123"), "admin"),
-            ("João Silva", "joao@email.com", generate_password_hash("123456"), "cliente"),
-            ("Maria Santos", "maria@email.com", generate_password_hash("senha123"), "cliente"),
+            ("Admin", "admin@loja.com", generate_password_hash("admin123"), TIPO_USUARIO_ADMIN),
+            ("João Silva", "joao@email.com", generate_password_hash("123456"), TIPO_USUARIO_PADRAO),
+            ("Maria Santos", "maria@email.com", generate_password_hash("senha123"), TIPO_USUARIO_PADRAO),
         ]
         cursor.executemany(
             "INSERT INTO usuarios (nome, email, senha, tipo) VALUES (?, ?, ?, ?)",

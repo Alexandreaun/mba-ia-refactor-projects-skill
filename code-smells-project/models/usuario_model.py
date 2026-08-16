@@ -1,5 +1,7 @@
 from werkzeug.security import check_password_hash, generate_password_hash
 
+from constants import TIPO_USUARIO_PADRAO
+
 
 class UsuarioModel:
     def __init__(self, db):
@@ -16,7 +18,7 @@ class UsuarioModel:
         row = cursor.fetchone()
         return self._to_dict(row) if row else None
 
-    def criar(self, nome, email, senha, tipo="cliente"):
+    def criar(self, nome, email, senha, tipo=TIPO_USUARIO_PADRAO):
         conn = self.db.get_connection()
         cursor = conn.cursor()
         cursor.execute(

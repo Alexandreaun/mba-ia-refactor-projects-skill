@@ -69,10 +69,11 @@ class ProdutoController:
         preco_min = request.args.get("preco_min", None)
         preco_max = request.args.get("preco_max", None)
 
-        if preco_min:
-            preco_min = float(preco_min)
-        if preco_max:
-            preco_max = float(preco_max)
+        try:
+            preco_min = float(preco_min) if preco_min else None
+            preco_max = float(preco_max) if preco_max else None
+        except ValueError:
+            return error("preco_min e preco_max devem ser numéricos", 400)
 
         resultados = self.produto_model.buscar(termo, categoria, preco_min, preco_max)
         return success(resultados, total=len(resultados))

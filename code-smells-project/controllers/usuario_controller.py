@@ -35,6 +35,10 @@ class UsuarioController:
 
     def login(self):
         dados = request.get_json()
+
+        if not dados:
+            return error("Dados inválidos", 400)
+
         email = dados.get("email", "")
         senha = dados.get("senha", "")
 

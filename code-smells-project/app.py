@@ -43,7 +43,8 @@ def create_app():
     usuario_controller = UsuarioController(usuario_model)
     pedido_controller = PedidoController(pedido_model)
     relatorio_controller = RelatorioController(pedido_model)
-    admin_controller = AdminController(admin_model, db.db_path)
+    ambiente = "desenvolvimento" if Config.DEBUG else "producao"
+    admin_controller = AdminController(admin_model, db.db_path, ambiente)
 
     app.register_blueprint(create_produto_blueprint(produto_controller))
     app.register_blueprint(create_usuario_blueprint(usuario_controller))
