@@ -37,7 +37,7 @@ Ao resolver os itens do relatório `audit-project-{numero}.md`, aplique as trans
    * *Ação:* Extraia valores literais não documentados para constantes semânticas globais ou no topo do arquivo.
 9. **Improper Output Routing:**
    * *Ação:* Ao invés de escrever print(""), utilize o módulo built-in de log da linguagem de programação correspondente ao projeto.
-10. **Premature Server Binding:**
+10. **Sync over Async:**
    * *Ação:* Ao chamar funções assíncronas utilize async/await.
 11. **Nomenclatura de Variáveis inconsistentes:**
    * *Ação:* Nomeie as variáveis de acordo com os dados que elas a carregam para facilitar a legibilidade.

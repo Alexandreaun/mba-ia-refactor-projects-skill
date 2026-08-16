@@ -26,7 +26,7 @@ Antes de gerar e salvar o relatório final, você DEVE obrigatoriamente estrutur
 **HIGH**
 3. **Fat Controllers / Logic in View:** Controladores ou Componentes Visuais que contêm regras de negócio puras, cálculos complexos ou manipulação direta de dados, impedindo o teste unitário da regra sem carregar a interface/rede.
 4. **Tight Coupling (Forte Acoplamento):** Instanciação direta de dependências complexas (bancos de dados, serviços externos) dentro da classe consumidora, inviabilizando injeção de dependência (DI) e mocks.
-5. **Premature Server Binding:** Invocação de métodos assíncrono de forma síncrona. (ex: manager.initDb())
+5. **Sync over Async:** Invocação de métodos assíncrono de forma síncrona. (ex: manager.initDb())
 
 **MEDIUM**
 6. **N+1 Query Problem / Inefficient Loops:** Consultas a banco de dados ou chamadas de rede feitas dentro de loops de iteração, em vez de buscar os dados em lote (batch/JOINs).
@@ -59,7 +59,7 @@ Use estes padrões para preencher o campo `Recommendation` no seu relatório. Ad
 *   *Antes:* `class Payment { init() { this.api = new StripeAPI() } }`
 *   *Depois:* `class Payment { init(api: PaymentGateway) { this.api = api } }`. A dependência é injetada.
 
-**5. Premature Server Binding (HIGH)**
+**5. Sync over Async (HIGH)**
 *   *Antes:* Chamando manager.initDb(); de forma síncrona
     ```tsx
     const app = express();
@@ -123,15 +123,19 @@ Use estes padrões para preencher o campo `Recommendation` no seu relatório. Ad
 
 <Outputs>
 Não imprima o relatório inteiro no terminal. Em vez disso:
+
 1. Verifique se o diretório `reports/` existe na raiz do projeto. Se não, crie-o.
-2. Crie e salve cada relatório dentro do diretório `reports/`. Utilize um índice numérico sequencial e incremental para nomear os arquivos, seguindo o padrão `audit-project-{numero_sequencial}.md` (ex: `reports/audit-project-1.md`, `reports/audit-project-2.md`, `reports/audit-project-3.md`, e assim por diante).
-3. Utilize EXATAMENTE a estrutura abaixo (Ordene os achados como CRITICAL → HIGH → MEDIUM → LOW):
+2. Validação de Contexto: Antes de salvar, verifique na pasta `reports/` se já existe um relatório prévio referente ao código/módulo que você está auditando agora.
+3. Se já existir (Sobrescrita): Sobrescreva o arquivo existente (ex: substituindo o conteúdo do antigo `reports/audit-project-1.md`). NUNCA crie um arquivo duplicado se a auditoria for do mesmo contexto.
+4. Se for um contexto inédito (Criação): Crie um arquivo novo utilizando um índice numérico sequencial e incremental, seguindo o padrão audit-project-{numero_sequencial}.md (ex: `reports/audit-project-1.md`, `reports/audit-project-2.md`, e assim por diante).
+5. O conteúdo do arquivo DEVE utilizar EXATAMENTE a estrutura abaixo (Ordene os achados como CRITICAL → HIGH → MEDIUM → LOW):
 
 <Template_Relatorio>
+```text
 ================================
 ARCHITECTURE AUDIT REPORT
 ================================
-Project: <name>
+```
 Stack:   <language + framework>
 Files:   <N> analyzed | ~<LOC> estimated lines of code
 
