@@ -186,19 +186,19 @@ CRITICAL: 2 | HIGH: 2 | MEDIUM: 3 | LOW: 3
 
 | **Project: code-smells-project**
 |:---:
-| <img src="./Pasted Graphic 18.png" width="400"> |
+| <img src="/images/Pasted Graphic 18.png" width="400"> |
 
 ---
 
 | **Project: ecommerce-api-legacy**
 |:---:
-| <img src="./Pasted Graphic 23.png" width="400"> |
+| <img src="/images//Pasted Graphic 23.png" width="400"> |
 
 ---
 
 | **Project: task-manager-api**
 |:---:
-| <img src="./message.png" width="400"> |
+| <img src="/images//message.png" width="400"> |
 
 ## D. Como executar
 
