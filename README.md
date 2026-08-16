@@ -226,4 +226,4 @@ CRITICAL: 2 | HIGH: 2 | MEDIUM: 3 | LOW: 3
 - rodar comando para auditoria e refactor: /refactor-arch
 
 **Como validar o funcionamento:**
-- rode o comando no claude code `/refactor-arch`, conforme instruções acima, e veja o arquivo audit-project.md na pasta `/reports`, no arquivo de cada projeto deverá conter 0 findings, isso prova o funcionamento correto da SKILL.
+- rode o comando no claude code `/refactor-arch`, conforme instruções acima, e veja o arquivo audit-project.md na pasta `/reports` no arquivo de cada projeto, deverá conter um número menor de achados comparando com o relatório anterior, isso prova o funcionamento correto da SKILL.
