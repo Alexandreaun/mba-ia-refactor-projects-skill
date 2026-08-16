@@ -220,10 +220,10 @@ CRITICAL: 2 | HIGH: 2 | MEDIUM: 3 | LOW: 3
 - npm start
 
 **Comandos para executar a Skill em cada projeto:**
-> **via Claude CLI:**
-- /refactor-arch analise e refatore o projeto code-smells-project
-- /refactor-arch analise e refatore o projeto ecommerce-api-legacy
-- /refactor-arch analise e refatore o projeto task-manager-api
+> **via Terminal:**
+- acesse o projeto via terminal e ative a sessão do claude 
+  > cd {pasta do projeto} && claude (ex: cd code-smells-project && claude)
+- rodar comando para auditoria e refactor: /refactor-arch
 
 **Como validar o funcionamento:**
-- compare os arquivos gerados/alterados após a refatoração com os arquivos do projeto antigo, veja a estrutura de pastas e código baseado na arquitetura MVC e todas as melhorias de código aplicadas com base nos anti-patterns listados na skill project-audit.md
+- rode o comando no claude code `/refactor-arch`, conforme instruções acima, e veja o arquivo audit-project.md na pasta `/reports`, no arquivo de cada projeto deverá conter 0 findings, isso prova o funcionamento correto da SKILL.
