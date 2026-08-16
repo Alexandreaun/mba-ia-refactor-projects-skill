@@ -2,7 +2,7 @@
 
 ###  Projeto: Code-smells-project:
 *   **CRITICAL:**
-    - Secret_key chumbadas no código gerando vulnerabilidade para o projeto. **Justificativa:** Gera vulnerabilidade para o projeto sendo assim facilitando a qualquer pessoa conseguir as credenciais tem fácil acesso ao projeto.
+    - Secret_key chumbadas no código gerando vulnerabilidade para o projeto. **Justificativa:** Gera vulnerabilidade para o projeto sendo assim facilitando a qualquer pessoa conseguir as credenciais, tendo fácil acesso ao projeto.
     **MEDIUM:**
     - Tratamento de erros duplicados, try/exception repetidos. **Justificativa:** Dificulta entendimento de cada erro, para caso necessário identificar um problema ou efetuar uma manutenção.
     - Mistura de responsabilidades nas classes. **Justificativa:** Em arquitetura de software é imprescindível que cada camada tenha sua e específica responsabilidade a fim de facilitar manutenção do código e testes unitários.
@@ -43,8 +43,28 @@
 ### Seleção de Anti-patterns
 
 Anti-patterns incluídos:
-*   **Segurança:** 
-
+1. **Hardcoded Secrets & Configs:**
+ - Anti-pattern que gera um grande risco de segurança para a aplicação.
+2. **God Class / Monolithic Entrypoint:** 
+ - Gera ilegibilidade, dificulta testes unitários.
+3. **Fat Controllers / Logic in View:** 
+ - Infringe regras de responsabilidade das camadas em arquitetura de software
+4. **Tight Coupling (Forte Acoplamento):** 
+ - Infringe os princípios de SOLID, tornando também dificil manutenção, dificuldade em testes unitários
+5. **Sync-over-Async:** 
+ - Causa Esgotamento do Thread Pool, Deadlocks, queda de performance
+6. **N+1 Query Problem / Inefficient Loops:** 
+ -  Tratamento essencial porque ele degrada drasticamente a performance, multiplica o consumo de recursos do banco de dados e impede a escala da aplicação em ambiente de produção.
+7. **Swallowed Exceptions / Duplicated Error Handling:** 
+ - Tratamento fundamental para evitar falhas silenciosas, perda de dados e manutenções complexas.
+8. **Deprecated/Unsafe APIs:** 
+ - Acumula dívida técnica, abre brechas críticas de segurança e paralisa a evolução do sistema
+9. **Magic Numbers / Magic Strings:** 
+ - Dificultam a leitura do código, espalham valores sem contexto e tornam a manutenção difícil.
+10. **Nomenclatura de Variáveis inconsistentes:** 
+ - Deve ser tratado porque prejudica a legibilidade do código, dificulta a manutenção, gera bugs e diminui a produtividade da equipe.
+11. **Imports desnecessários:** 
+ - Dificultam a leitura e a manutenção, aumentam levemente o tempo de compilação do sistema.
 
 ### Agnosticismo de Tecnologia
 A skill foi projetada para ser **agnóstica de linguagem**. 
