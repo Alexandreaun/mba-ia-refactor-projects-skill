@@ -1,0 +1,9 @@
+const PAYMENT_STATUS = Object.freeze({
+    PAID: 'PAID',
+    DENIED: 'DENIED',
+});
+
+const VISA_CARD_PREFIX = '4';
+const DEFAULT_PASSWORD = '123456';
+
+module.exports = { PAYMENT_STATUS, VISA_CARD_PREFIX, DEFAULT_PASSWORD };
